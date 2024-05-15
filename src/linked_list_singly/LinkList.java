@@ -1,12 +1,9 @@
 package linked_list_singly;
 
-
-import org.w3c.dom.Node;
-
 public class LinkList<T> {
 
-    private Node head;
-    private Node tail;
+    private Node<T> head;
+    private Node<T> tail;
     private int size;
 
     LinkList(){
@@ -17,7 +14,7 @@ public class LinkList<T> {
 
     private static class Node<T>{
         T data;
-        Node next;
+        Node<T> next;
 
         Node(T data){
             this.data = data;
@@ -27,7 +24,7 @@ public class LinkList<T> {
 
     //add at first
     public void addFirst(T data){
-        Node newNode = new Node(data);
+        Node<T> newNode = new Node<>(data);
         size++;
         if(head == null){
             head = newNode;
@@ -40,7 +37,7 @@ public class LinkList<T> {
 
     //add to the last
     public void add(T data){
-        Node newNode = new Node(data);
+        Node<T> newNode = new Node<>(data);
         size++;
         if(head == null){
             head = newNode;
@@ -56,7 +53,7 @@ public class LinkList<T> {
         if (head == null){
             System.out.println("empty list");
         }else{
-            Node temp = head;
+            Node<T> temp = head;
             while(temp != null){
                 System.out.print(temp.data + "->");
                 temp = temp.next;
@@ -88,8 +85,8 @@ public class LinkList<T> {
             tail = null;
             size--;
         }else{
-            Node beforeLast = head;
-            Node last = head.next;
+            Node<T> beforeLast = head;
+            Node<T> last = head.next;
 
             while(last.next != null){
                 last = last.next;
@@ -99,6 +96,83 @@ public class LinkList<T> {
             tail = beforeLast;
             size--;
         }
+    }
+
+    //insert at given position
+   public void insertAt(int position, T data){
+        if (head == null){
+            System.out.println("empty list");
+            return;
+        }
+
+       Node<T> newNode = new Node<>(data);
+        if(position == 0){
+            newNode.next = head;
+            head = newNode;
+        }else if(position == size){
+            tail.next = newNode;
+            tail = newNode;
+        }else {
+            Node<T> temp = head;
+            int count = 0;
+            while(count < position -1){
+                temp = temp.next;
+                count++;
+            }
+            newNode.next = temp.next;
+            temp.next = newNode;
+        }
+
+        size++;
+   }
+    //delete at given position
+    public void deleteAt(int position){
+        if (head == null){
+            System.out.println("empty list");
+            return;
+        }
+
+        if (position == 0 && head.next == null){
+            head = null;
+            tail = null;
+        }else if(position == 0) {
+            head = head.next;
+        }else{
+            Node<T> temp = head;
+            int count = 0;
+            while(count < position -1){
+                count++;
+                temp = temp.next;
+            }
+            temp.next = temp.next.next;
+        }
+        size--;
+    }
+    //get data at given position
+    public T getDataAt(int position){
+        if (head == null){
+            T result = (T) "empty list";
+            return result;
+        }
+        Node<T> temp = head;
+        int count = 0;
+        while(count < position){
+            temp = temp.next;
+            count++;
+        }
+        return temp.data;
+    }
+
+    //find data
+    public boolean find(T keyData){
+        Node<T> temp = head;
+        while(temp != null){
+            if(temp.data == keyData){
+                return true;
+            }
+            temp = temp.next;
+        }
+        return false;
     }
 
     public int getSize(){
@@ -126,15 +200,30 @@ public class LinkList<T> {
         linkList.deleteFirst();
         linkList.showData();
         System.out.println(linkList.getSize());
-
-        System.out.println("after delete from the last");
-        linkList.deleteLast();
-        linkList.deleteLast();
-
+        System.out.println("after insert at (0) ");
+        linkList.insertAt(0, 1); //1->9->5->11->15->null
+        linkList.showData();
+        System.out.println(linkList.getSize());
+         System.out.println("after insert at (last) ");
+        linkList.insertAt(linkList.getSize(), 7); //1->9->5->11->15->7->null
+        linkList.showData();
+        System.out.println(linkList.getSize());
+         System.out.println("after insert at (3) ");
+        linkList.insertAt(3, 2); //1->9->5->2->11->15->7->null
         linkList.showData();
         System.out.println(linkList.getSize());
 
+        System.out.println("after delete at (0) ");
+        linkList.deleteAt(0); //9->5->2->11->15->7->null
+        linkList.showData();
+        System.out.println(linkList.getSize());
+        System.out.println("after delete at (3) ");
+        linkList.deleteAt(3); //9->5->2->15->7->null
+        linkList.showData();
+        System.out.println(linkList.getSize());
 
+        System.out.println("get data from at (3) : " + linkList.getDataAt(0)); //9->5->2->15->7->null
+        System.out.println("find data  : " + linkList.find(8));
     }
 
 }
