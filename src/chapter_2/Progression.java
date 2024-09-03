@@ -8,7 +8,7 @@ public class Progression {
 
     //construct a progression starting at zero
     public Progression() {
-        this.current = 0;
+        this(0);
     }
 
     //construct a progression with given start value
